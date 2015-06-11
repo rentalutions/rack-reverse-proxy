@@ -44,6 +44,12 @@ describe Rack::ReverseProxy do
       last_response.headers['Status'].should == nil
     end
 
+    it "the response header for content-length should not contain arrays" do
+      subject = Rack::ReverseProxy.new
+      resp = subject.send(:create_response_headers, {'Content-Length' => ['1234']})
+      resp["Content-Length"].should == '1234'
+    end
+
     it "the response header should never transfer-encoding" do
       stub_request(:any, 'example.com/test/stuff').to_return(:headers => {'transfer-encoding' => 'Chunked'})
       get '/test/stuff'

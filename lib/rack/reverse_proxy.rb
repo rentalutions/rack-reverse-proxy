@@ -96,6 +96,10 @@ module Rack
       # TODO: figure out how to handle chunked responses
       response_headers.delete('transfer-encoding')
       # TODO: Verify Content Length, and required Rack headers
+      if response_headers["Content-Length"].kind_of?(Array)
+        response_headers["Content-Length"] = response_headers["Content-Length"][0]
+      end
+      response_headers
       response_headers
     end
 
